@@ -18,7 +18,7 @@ sheet =
 fileStructure : CssFileStructure
 fileStructure =
     Css.File.toFileStructure
-        [ ( "index.css", Css.File.compile [ sheet ] ) ]
+        [ ( "main.css", Css.File.compile [ sheet ] ) ]
 
 
 main : CssCompilerProgram

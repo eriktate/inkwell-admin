@@ -11,7 +11,7 @@ gulp.task('watch', function() {
 
 // Regenerate CSS from elm source
 gulp.task('elm-css', function() {
-  exec('elm-css src/Stylesheets.elm --output src/main.css', function(err, stdout, stderr) {
+  exec('elm-css src/Stylesheets.elm --output src/', function(err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
   });
