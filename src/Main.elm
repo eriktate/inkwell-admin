@@ -3,6 +3,7 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
+import InkUI.Buttons exposing (inkButton, inkButtonPrimary)
 
 
 main : Program Never Model Msg
@@ -123,7 +124,7 @@ viewPost blog =
     div [ class "post-container" ]
         [ div [ class "post-title" ]
             [ text blog.title
-            , button [ class (publishedClass blog), onClick (TogglePublish blog.id) ]
+            , inkButtonPrimary [ class (publishedClass blog), onClick (TogglePublish blog.id) ]
                 [ text (eitherOr blog.published "Unpublish" "Publish") ]
             ]
         , div [ class "post-blurb" ]
