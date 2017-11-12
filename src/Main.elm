@@ -3,7 +3,9 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import InkUI.Buttons exposing (inkButton, inkButtonPrimary)
+import InkUI.Buttons exposing (inkButton, inkButtonPrimary, inkButtonCancel, editButton, deleteButton)
+import InkUI.Input exposing (inkInput)
+import InkUI.Card exposing (inkCard)
 
 
 main : Program Never Model Msg
@@ -121,14 +123,17 @@ viewPosts blogs =
 
 viewPost : Blog -> Html Msg
 viewPost blog =
-    div [ class "post-container" ]
+    inkCard []
         [ div [ class "post-title" ]
             [ text blog.title
             , inkButtonPrimary [ class (publishedClass blog), onClick (TogglePublish blog.id) ]
                 [ text (eitherOr blog.published "Unpublish" "Publish") ]
+            , editButton [] []
+            , deleteButton [] []
             ]
         , div [ class "post-blurb" ]
             [ text blog.blurb ]
+        , inkInput "Test" []
         ]
 
 

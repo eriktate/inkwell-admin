@@ -3,8 +3,11 @@ port module Stylesheets exposing (..)
 import Css exposing (stylesheet, Stylesheet)
 import Css.Namespace exposing (namespace)
 import Css.File exposing (CssFileStructure, CssCompilerProgram)
+import Css.Normalize exposing (css)
 import InkUI.Buttons
 import InkUI.Base
+import InkUI.Input
+import InkUI.Card
 
 
 port files : CssFileStructure -> Cmd msg
@@ -12,13 +15,19 @@ port files : CssFileStructure -> Cmd msg
 
 sheet : Stylesheet
 sheet =
-    (stylesheet << namespace "iw") (InkUI.Base.css ++ InkUI.Buttons.css)
+    (stylesheet << namespace "iw") (InkUI.Base.css ++ InkUI.Buttons.css ++ InkUI.Input.css ++ InkUI.Card.css)
 
 
 fileStructure : CssFileStructure
 fileStructure =
     Css.File.toFileStructure
-        [ ( "main.css", Css.File.compile [ sheet ] ) ]
+        [ ( "main.css"
+          , Css.File.compile
+                [ Css.Normalize.css
+                , sheet
+                ]
+          )
+        ]
 
 
 main : CssCompilerProgram
