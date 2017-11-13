@@ -1,7 +1,7 @@
 module InkUI.Buttons exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (src)
+import Html.Attributes exposing (src, title)
 
 
 -- CSS things
@@ -82,36 +82,41 @@ inkButtonCancel attrs inner =
     inkButton (class [ Cancel ] :: attrs) inner
 
 
-iconButton : String -> List (Attribute msg) -> List (Html msg) -> Html msg
-iconButton icon attrs inner =
-    img (class [ IconButton ] :: Html.Attributes.src ("/icons/svg/" ++ icon ++ ".svg") :: attrs) inner
+dataGlyph : String -> Attribute msg
+dataGlyph name =
+    Html.Attributes.attribute "data-glyph" name
 
 
-editButton : List (Attribute msg) -> List (Html msg) -> Html msg
-editButton attrs inner =
-    iconButton "pencil" attrs inner
+iconButton : String -> String -> List (Attribute msg) -> Html msg
+iconButton icon desc attrs =
+    span ([ Html.Attributes.class "oi", (dataGlyph icon), title desc ] ++ attrs) []
 
 
-deleteButton : List (Attribute msg) -> List (Html msg) -> Html msg
-deleteButton attrs inner =
-    iconButton "trash" attrs inner
+editButton : List (Attribute msg) -> Html msg
+editButton attrs =
+    iconButton "pencil" "edit" attrs
 
 
-metricsButton : List (Attribute msg) -> List (Html msg) -> Html msg
-metricsButton attrs inner =
-    iconButton "bar-chart" attrs inner
+deleteButton : List (Attribute msg) -> Html msg
+deleteButton attrs =
+    iconButton "trash" "delete" attrs
 
 
-tagButton : List (Attribute msg) -> List (Html msg) -> Html msg
-tagButton attrs inner =
-    iconButton "tags" attrs inner
+metricsButton : List (Attribute msg) -> Html msg
+metricsButton attrs =
+    iconButton "bar-chart" "analytics" attrs
 
 
-publishButton : List (Attribute msg) -> List (Html msg) -> Html msg
-publishButton attrs inner =
-    iconButton "account-login" attrs inner
+tagButton : List (Attribute msg) -> Html msg
+tagButton attrs =
+    iconButton "tags" " tags" attrs
 
 
-unpublishButton : List (Attribute msg) -> List (Html msg) -> Html msg
-unpublishButton attrs inner =
-    iconButton "account-logout" attrs inner
+publishButton : List (Attribute msg) -> Html msg
+publishButton attrs =
+    iconButton "account-login" "publish" attrs
+
+
+unpublishButton : List (Attribute msg) -> Html msg
+unpublishButton attrs =
+    iconButton "account-logout" "unpublish" attrs

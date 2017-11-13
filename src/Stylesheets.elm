@@ -8,6 +8,8 @@ import InkUI.Buttons
 import InkUI.Base
 import InkUI.Input
 import InkUI.Card
+import InkUI.Grid
+import InkUI.Masthead
 
 
 port files : CssFileStructure -> Cmd msg
@@ -15,7 +17,7 @@ port files : CssFileStructure -> Cmd msg
 
 sheet : Stylesheet
 sheet =
-    (stylesheet << namespace "iw") (InkUI.Base.css ++ InkUI.Buttons.css ++ InkUI.Input.css ++ InkUI.Card.css)
+    (stylesheet << namespace "iw") (InkUI.Base.css ++ InkUI.Buttons.css ++ InkUI.Input.css ++ InkUI.Card.css ++ InkUI.Grid.css ++ InkUI.Masthead.css)
 
 
 fileStructure : CssFileStructure

@@ -30,6 +30,17 @@ css =
                 , padding (Css.em 0.5)
                 , boxSizing borderBox
                 ]
+            , CssEl.textarea
+                [ borderStyle solid
+                , borderWidth (px 1)
+                , borderColor dark
+                , backgroundColor ultrawhite
+                , boxShadow4 (px 1) (px 2) (px 3) gray
+                , width (pct 100)
+                , resize vertical
+                , padding (Css.em 0.5)
+                , boxSizing borderBox
+                ]
             , CssEl.label
                 [ fontFamilies [ "Raleway", "sans-serif" ]
                 , fontSize (pt 10)
@@ -49,6 +60,17 @@ inkInput label attrs =
         [ Html.label []
             [ Html.text label ]
         , input
+            attrs
+            []
+        ]
+
+
+inkTextarea : String -> List (Attribute msg) -> Html msg
+inkTextarea label attrs =
+    fieldset [ class [ Input ] ]
+        [ Html.label []
+            [ Html.text label ]
+        , textarea
             attrs
             []
         ]

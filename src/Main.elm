@@ -1,11 +1,16 @@
 module Main exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
-import Html.Events exposing (onClick)
-import InkUI.Buttons exposing (inkButton, inkButtonPrimary, inkButtonCancel, editButton, deleteButton)
-import InkUI.Input exposing (inkInput)
-import InkUI.Card exposing (inkCard)
+import InkUI.Masthead exposing (inkMasthead)
+import InkUI.Grid exposing (inkRow, CssClasses)
+import InkUI.Base exposing (..)
+import Views.BlogCard as BlogCard
+import Html.CssHelpers
+import Data.Blog exposing (Blog)
+
+
+{ id, class, classList } =
+    Html.CssHelpers.withNamespace namespace
 
 
 main : Program Never Model Msg
@@ -20,14 +25,6 @@ main =
 
 
 -- MODEL --
-
-
-type alias Blog =
-    { id : String
-    , title : String
-    , blurb : String
-    , published : Bool
-    }
 
 
 type alias Model =
@@ -106,35 +103,20 @@ handlePublish blogs blogID =
 
 view : Model -> Html Msg
 view model =
-    div [ class "masthead" ]
-        [ text "This is the top bar"
+    div []
+        [ inkMasthead []
+            [ text "InkWell" ]
         , viewPosts model.blogs
         ]
 
 
 viewPosts : List Blog -> Html Msg
 viewPosts blogs =
-    div []
+    inkRow []
         (List.map
-            (\blog -> viewPost blog)
+            (\blog -> BlogCard.view blog)
             blogs
         )
-
-
-viewPost : Blog -> Html Msg
-viewPost blog =
-    inkCard []
-        [ div [ class "post-title" ]
-            [ text blog.title
-            , inkButtonPrimary [ class (publishedClass blog), onClick (TogglePublish blog.id) ]
-                [ text (eitherOr blog.published "Unpublish" "Publish") ]
-            , editButton [] []
-            , deleteButton [] []
-            ]
-        , div [ class "post-blurb" ]
-            [ text blog.blurb ]
-        , inkInput "Test" []
-        ]
 
 
 publishedClass : Blog -> String
