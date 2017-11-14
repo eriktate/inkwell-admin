@@ -21,6 +21,7 @@ css =
     [ Css.class Row
         [ displayFlex
         , flexDirection row
+        , flexWrap wrap
         ]
     ]
         ++ (List.map toColumn (range 1 12))
@@ -29,9 +30,7 @@ css =
 toColumn : Int -> Snippet
 toColumn col =
     Css.class (Col col)
-        [ flexGrow (num (toFloat col))
-        , flexWrap wrap
-        ]
+        [ flex3 (int col) (int col) (int 0) ]
 
 
 inkRow : List (Attribute msg) -> List (Html msg) -> Html msg

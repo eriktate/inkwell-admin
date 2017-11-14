@@ -5,6 +5,7 @@ import InkUI.Masthead exposing (inkMasthead)
 import InkUI.Grid exposing (inkRow, CssClasses)
 import InkUI.Base exposing (..)
 import Views.BlogCard as BlogCard
+import Views.Shell as Shell
 import Html.CssHelpers
 import Data.Blog exposing (Blog)
 
@@ -103,11 +104,7 @@ handlePublish blogs blogID =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ inkMasthead []
-            [ text "InkWell" ]
-        , viewPosts model.blogs
-        ]
+    Shell.view (viewPosts model.blogs)
 
 
 viewPosts : List Blog -> Html Msg
@@ -117,16 +114,3 @@ viewPosts blogs =
             (\blog -> BlogCard.view blog)
             blogs
         )
-
-
-publishedClass : Blog -> String
-publishedClass blog =
-    eitherOr blog.published "post-published" "post-unpublished"
-
-
-eitherOr : Bool -> String -> String -> String
-eitherOr condition opt1 opt2 =
-    if condition then
-        opt1
-    else
-        opt2

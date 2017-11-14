@@ -4,12 +4,13 @@ import Css exposing (stylesheet, Stylesheet)
 import Css.Namespace exposing (namespace)
 import Css.File exposing (CssFileStructure, CssCompilerProgram)
 import Css.Normalize exposing (css)
-import InkUI.Buttons
-import InkUI.Base
-import InkUI.Input
-import InkUI.Card
-import InkUI.Grid
-import InkUI.Masthead
+import InkUI.Base as Base
+import InkUI.Buttons as Buttons
+import InkUI.Input as Input
+import InkUI.Card as Card
+import InkUI.Grid as Grid
+import InkUI.Masthead as Masthead
+import Views.BlogCard as BlogCard
 
 
 port files : CssFileStructure -> Cmd msg
@@ -17,7 +18,15 @@ port files : CssFileStructure -> Cmd msg
 
 sheet : Stylesheet
 sheet =
-    (stylesheet << namespace "iw") (InkUI.Base.css ++ InkUI.Buttons.css ++ InkUI.Input.css ++ InkUI.Card.css ++ InkUI.Grid.css ++ InkUI.Masthead.css)
+    (stylesheet << namespace "iw")
+        (Base.css
+            ++ Buttons.css
+            ++ Input.css
+            ++ Card.css
+            ++ Grid.css
+            ++ Masthead.css
+            ++ BlogCard.css
+        )
 
 
 fileStructure : CssFileStructure

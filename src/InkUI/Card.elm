@@ -1,6 +1,7 @@
 module InkUI.Card exposing (..)
 
 import Html exposing (..)
+import Html.Attributes exposing (style)
 import Css exposing (..)
 import InkUI.Base exposing (..)
 import InkUI.Grid exposing (inkRow, inkCol)
@@ -28,10 +29,10 @@ css =
         , padding (Css.em 1)
         , descendants
             [ Css.class Title
-                [ borderBottom3 (px 1) solid dark
+                [ borderBottom3 (px 1) solid black
                 , margin4 (Css.em -1) (Css.em -1) (px 0) (Css.em -1)
                 , padding (Css.em 1)
-                , backgroundColor dark
+                , backgroundColor black
                 , color white
                 , fontWeight bold
                 ]
@@ -39,13 +40,18 @@ css =
                 [ marginTop (Css.em 1) ]
             , Css.class Menu
                 [ margin4 (px 0) (Css.em -1) (Css.em -1) (px 0)
-                , backgroundColor gray
+                , backgroundColor dark
+                , minWidth (px 48)
+                , maxWidth (px 48)
+                , right (px 0)
+                , height (pct 100)
                 , children
                     [ everything
                         [ display block
                         , textAlign center
                         , padding (px 8)
                         , color white
+                        , fontSize (pt 18)
                         ]
                     ]
                 ]

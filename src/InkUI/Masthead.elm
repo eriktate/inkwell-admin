@@ -17,13 +17,17 @@ type CssClasses
 css : List Snippet
 css =
     [ Css.class Masthead
-        [ backgroundColor dark
+        [ backgroundColor black
         , width (pct 100)
         , height (px 64)
         , color white
-        , boxShadow4 (px 1) (px 0) (px 3) gray
+        , boxShadow4 (px 0) (px 2) (px 3) gray
         , fontWeight bold
         , fontSize (pt 24)
+        , displayFlex
+        , flexDirection column
+        , justifyContent center
+        , padding2 (px 0) (Css.em 1)
         ]
     ]
 
