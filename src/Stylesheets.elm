@@ -10,7 +10,7 @@ import InkUI.Input as Input
 import InkUI.Card as Card
 import InkUI.Grid as Grid
 import InkUI.Masthead as Masthead
-import Views.BlogCard as BlogCard
+import Views.Dashboard as Dashboard
 
 
 port files : CssFileStructure -> Cmd msg
@@ -25,7 +25,7 @@ sheet =
             ++ Card.css
             ++ Grid.css
             ++ Masthead.css
-            ++ BlogCard.css
+            ++ Dashboard.css
         )
 
 

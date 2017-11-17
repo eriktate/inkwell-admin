@@ -1,6 +1,7 @@
 module InkUI.Buttons exposing (..)
 
 import Html exposing (..)
+import Html.Events exposing (onClick)
 import Html.Attributes exposing (src, title)
 
 
@@ -87,36 +88,36 @@ dataGlyph name =
     Html.Attributes.attribute "data-glyph" name
 
 
-iconButton : String -> String -> List (Attribute msg) -> Html msg
-iconButton icon desc attrs =
-    span ([ Html.Attributes.class "oi", (dataGlyph icon), title desc ] ++ attrs) []
+iconButton : msg -> String -> String -> List (Attribute msg) -> Html msg
+iconButton msg icon desc attrs =
+    span ([ Html.Attributes.class "oi", (dataGlyph icon), title desc, onClick msg ] ++ attrs) []
 
 
-editButton : List (Attribute msg) -> Html msg
-editButton attrs =
-    iconButton "pencil" "edit" attrs
+editButton : msg -> List (Attribute msg) -> Html msg
+editButton msg attrs =
+    iconButton msg "pencil" "edit" attrs
 
 
-deleteButton : List (Attribute msg) -> Html msg
-deleteButton attrs =
-    iconButton "trash" "delete" attrs
+deleteButton : msg -> List (Attribute msg) -> Html msg
+deleteButton msg attrs =
+    iconButton msg "trash" "delete" attrs
 
 
-metricsButton : List (Attribute msg) -> Html msg
-metricsButton attrs =
-    iconButton "bar-chart" "analytics" attrs
+metricsButton : msg -> List (Attribute msg) -> Html msg
+metricsButton msg attrs =
+    iconButton msg "bar-chart" "analytics" attrs
 
 
-tagButton : List (Attribute msg) -> Html msg
-tagButton attrs =
-    iconButton "tags" " tags" attrs
+tagButton : msg -> List (Attribute msg) -> Html msg
+tagButton msg attrs =
+    iconButton msg "tags" " tags" attrs
 
 
-publishButton : List (Attribute msg) -> Html msg
-publishButton attrs =
-    iconButton "account-login" "publish" attrs
+publishButton : msg -> List (Attribute msg) -> Html msg
+publishButton msg attrs =
+    iconButton msg "account-login" "publish" attrs
 
 
-unpublishButton : List (Attribute msg) -> Html msg
-unpublishButton attrs =
-    iconButton "account-logout" "unpublish" attrs
+unpublishButton : msg -> List (Attribute msg) -> Html msg
+unpublishButton msg attrs =
+    iconButton msg "account-logout" "unpublish" attrs
