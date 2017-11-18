@@ -1,14 +1,14 @@
-module Pages.Dashboard exposing (Msg, Model, view, css, update, init)
+module Pages.Dashboard exposing (Msg, Model, view, update, init)
 
-import Html exposing (..)
+import Html exposing (Html)
 import Data.Blog exposing (Blog)
-import InkUI.Card as Card exposing (inkCardWithMenu)
-import InkUI.Grid as Grid exposing (inkRow)
-import InkUI.Base exposing (namespace)
 import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton)
-import InkUI.Checkbox exposing (inkCheckbox)
-import Css exposing (..)
-import Html.CssHelpers
+import Element exposing (..)
+import Element.Attributes exposing (..)
+import Style exposing (StyleSheet, style)
+import Style.Color as Color
+import Style.Shadow as Shadow
+import Color
 
 
 -- BAD THINGS
@@ -16,19 +16,43 @@ import Html.CssHelpers
 import Debug exposing (log)
 
 
-{ id, class, classList } =
-    Html.CssHelpers.withNamespace namespace
+type Styles
+    = Card
+    | CardTitle
+    | CardBody
+    | CardMenu
+    | Dashboard
+    | None
 
 
-type CssClasses
-    = BlogCard
+stylesheet : StyleSheet Styles variation
+stylesheet =
+    Style.styleSheet
+        [ style None []
+        , style Card
+            [ Color.background Color.white
+            , Shadow.box
+                { offset = ( 2, 4 )
+                , size = 5
+                , blur = 1
+                , color = Color.charcoal
+                }
+            ]
+        , style CardTitle
+            [ Color.text Color.white
+            , Color.background Color.black
+            ]
+        , style CardMenu
+            [ Color.background Color.charcoal ]
+        ]
 
 
-css : List Snippet
-css =
-    [ Css.class BlogCard
-        [ minWidth (px 320) ]
-    ]
+
+-- css : List Snippet
+-- css =
+--     [ Css.class BlogCard
+--         [ minWidth (px 320) ]
+--     ]
 
 
 type alias Model =
@@ -117,24 +141,29 @@ unpublishBlog id blog =
 
 view : Model -> Html Msg
 view model =
-    inkRow [] <| List.map blogCard model.blogs
+    layout stylesheet <|
+        row Dashboard [ padding 16, spacing 16 ] (List.map blogCard model.blogs)
 
 
-blogCard : Blog -> Html Msg
+blogCard : Blog -> Element Styles variation msg
 blogCard blog =
-    inkCardWithMenu [ class [ Grid.Col 1 ], class [ BlogCard ] ]
-        (div [ class [ Card.Title ] ]
-            [ Html.text blog.title ]
-        )
-        (div [ class [ Card.Body ] ]
-            [ Html.text blog.blurb ]
-        )
-        [ editButton (Edit blog.id) []
-        , handlePublishButton blog
-        , deleteButton (Delete blog.id) []
-        , tagButton (Tag blog.id) []
-        , metricsButton (Meter blog.id) []
-        , inkCheckbox handleCheck []
+    column Card
+        [ minWidth (px 320), width fill ]
+        [ el CardTitle [ padding 8 ] (text blog.title)
+        , row None
+            []
+            [ el CardBody [ width fill ] (text blog.blurb)
+            , el CardMenu
+                [ width (px 32) ]
+                (column None
+                    [ spacing 4 ]
+                    [ el None [] (text "A")
+                    , el None [] (text "B")
+                    , el None [] (text "C")
+                    , el None [] (text "D")
+                    ]
+                )
+            ]
         ]
 
 
