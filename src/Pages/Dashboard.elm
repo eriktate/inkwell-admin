@@ -6,6 +6,7 @@ import InkUI.Card as Card exposing (inkCardWithMenu)
 import InkUI.Grid as Grid exposing (inkRow)
 import InkUI.Base exposing (namespace)
 import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton)
+import InkUI.Checkbox exposing (inkCheckbox)
 import Css exposing (..)
 import Html.CssHelpers
 
@@ -41,6 +42,8 @@ type Msg
     | Delete String
     | Tag String
     | Meter String
+    | Check
+    | Uncheck
 
 
 init : ( Model, Cmd Msg )
@@ -75,10 +78,10 @@ update msg model =
             ( model, log "Clicked edit" <| Cmd.none )
 
         Publish id ->
-            ( model, log "Clicked publish" <| Cmd.none )
+            ( { model | blogs = List.map (publishBlog id) model.blogs }, Cmd.none )
 
         Unpublish id ->
-            ( model, log "Clicked unpublish" <| Cmd.none )
+            ( { model | blogs = List.map (unpublishBlog id) model.blogs }, Cmd.none )
 
         Delete id ->
             ( model, log "Clicked delete" <| Cmd.none )
@@ -88,6 +91,28 @@ update msg model =
 
         Meter id ->
             ( model, log "Clicked meter" <| Cmd.none )
+
+        Check ->
+            ( model, log "Checked box" <| Cmd.none )
+
+        Uncheck ->
+            ( model, log "Unchecked box" <| Cmd.none )
+
+
+publishBlog : String -> Blog -> Blog
+publishBlog id blog =
+    if id == blog.id then
+        { blog | published = True }
+    else
+        blog
+
+
+unpublishBlog : String -> Blog -> Blog
+unpublishBlog id blog =
+    if id == blog.id then
+        { blog | published = False }
+    else
+        blog
 
 
 view : Model -> Html Msg
@@ -109,12 +134,21 @@ blogCard blog =
         , deleteButton (Delete blog.id) []
         , tagButton (Tag blog.id) []
         , metricsButton (Meter blog.id) []
+        , inkCheckbox handleCheck []
         ]
+
+
+handleCheck : Bool -> Msg
+handleCheck check =
+    if check then
+        Check
+    else
+        Uncheck
 
 
 handlePublishButton : Blog -> Html Msg
 handlePublishButton blog =
     if blog.published then
-        unpublishButton (Publish blog.id) []
+        unpublishButton (Unpublish blog.id) []
     else
         publishButton (Publish blog.id) []

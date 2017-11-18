@@ -12,16 +12,6 @@ import Data.Blog exposing (Blog)
     Html.CssHelpers.withNamespace namespace
 
 
-main : Program Never Model Msg
-main =
-    program
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
-        }
-
-
 type Page
     = Dashboard Dashboard.Model
 
@@ -136,3 +126,17 @@ viewPage isLoading page =
                     Html.map DashboardMsg
                         (Dashboard.view subModel)
         )
+
+
+
+-- PROGRAM
+
+
+main : Program Never Model Msg
+main =
+    program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
