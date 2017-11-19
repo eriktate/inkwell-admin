@@ -2,7 +2,7 @@ module InkUI.Buttons exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
-import Html.Attributes exposing (src, title)
+import Html.Attributes exposing (src, title, type_)
 
 
 -- CSS things
@@ -68,19 +68,19 @@ css =
     ]
 
 
-inkButton : List (Attribute msg) -> List (Html msg) -> Html msg
-inkButton attrs inner =
-    button (class [ Button ] :: attrs) inner
+inkButton : String -> CssClasses -> msg -> Html msg
+inkButton label btnClass msg =
+    button [ type_ "button", class [ Button, btnClass ], onClick msg ] [ Html.text label ]
 
 
-inkButtonPrimary : List (Attribute msg) -> List (Html msg) -> Html msg
-inkButtonPrimary attrs inner =
-    inkButton (class [ Primary ] :: attrs) inner
+inkButtonPrimary : String -> msg -> Html msg
+inkButtonPrimary label msg =
+    inkButton label Primary msg
 
 
-inkButtonCancel : List (Attribute msg) -> List (Html msg) -> Html msg
-inkButtonCancel attrs inner =
-    inkButton (class [ Cancel ] :: attrs) inner
+inkButtonCancel : String -> msg -> Html msg
+inkButtonCancel label msg =
+    inkButton label Cancel msg
 
 
 dataGlyph : String -> Attribute msg

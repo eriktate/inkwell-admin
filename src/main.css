@@ -396,3 +396,14 @@ body {
     cursor: pointer;
     font-weight: bold;
 }
+
+.iwNewForm {
+    margin: 1em;
+    width: 100%;
+}
+
+.iwFormButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

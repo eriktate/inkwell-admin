@@ -1,15 +1,17 @@
 module Pages.Dashboard exposing (Msg, Model, view, css, update, init)
 
 import Html exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onSubmit)
+import Html.Attributes exposing (value)
 import Data.Blog exposing (Blog)
 import InkUI.Card as Card exposing (inkCard, inkCardWithMenu)
-import InkUI.Grid as Grid exposing (inkRow)
+import InkUI.Grid as Grid exposing (inkRow, inkCol)
 import InkUI.Base exposing (namespace)
-import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton, iconButton)
+import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton, iconButton, inkButtonPrimary, inkButtonCancel)
 import InkUI.Input exposing (inkInput, inkTextarea)
 import Css exposing (..)
 import Html.CssHelpers
+import Http
 
 
 -- BAD THINGS
@@ -24,6 +26,8 @@ import Debug exposing (log)
 type CssClasses
     = BlogCard
     | NewCard
+    | NewForm
+    | FormButton
 
 
 css : List Snippet
@@ -38,19 +42,28 @@ css =
         , cursor pointer
         , fontWeight bold
         ]
+    , Css.class NewForm
+        [ margin (Css.em 1)
+        , width (pct 100)
+        ]
+    , Css.class FormButton
+        [ displayFlex
+        , justifyContent center
+        , alignItems center
+        ]
     ]
 
 
 type alias Model =
     { blogs : List Blog
     , newBlog : NewBlog
-    , creating : Bool
     }
 
 
 type alias NewBlog =
     { title : String
-    , description : String
+    , blurb : String
+    , creating : Bool
     }
 
 
@@ -63,13 +76,15 @@ type Msg
     | Meter String
     | New
     | ChangeTitle String
-    | ChangeDescription String
+    | ChangeBlurb String
+    | CreateBlog
+    | CancelCreate
     | NoOp
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { blogs = dummyBlogs, newBlog = { title = "", description = "" }, creating = False }, Cmd.none )
+    ( { blogs = dummyBlogs, newBlog = { title = "", blurb = "", creating = False } }, Cmd.none )
 
 
 dummyBlogs : List Blog
@@ -117,7 +132,11 @@ update msg model =
             ( model, log "Clicked meter" <| Cmd.none )
 
         New ->
-            ( { model | creating = True }, Cmd.none )
+            let
+                newBlog =
+                    model.newBlog
+            in
+                ( { model | newBlog = { newBlog | creating = True } }, Cmd.none )
 
         ChangeTitle title ->
             let
@@ -126,12 +145,22 @@ update msg model =
             in
                 ( { model | newBlog = { newBlog | title = title } }, Cmd.none )
 
-        ChangeDescription desc ->
+        ChangeBlurb desc ->
             let
                 newBlog =
                     model.newBlog
             in
-                ( { model | newBlog = { newBlog | description = desc } }, Cmd.none )
+                ( { model | newBlog = { newBlog | blurb = desc } }, Cmd.none )
+
+        CreateBlog ->
+            ( model, log "Creating blog!" <| Cmd.none )
+
+        CancelCreate ->
+            let
+                newBlog =
+                    model.newBlog
+            in
+                ( { model | newBlog = { newBlog | creating = False } }, log "Cancelling blog!" <| Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
@@ -155,29 +184,36 @@ unpublishBlog id blog =
 
 view : Model -> Html Msg
 view model =
-    inkRow [] <| (newCard model) :: List.map blogCard model.blogs
+    inkRow [] <| (newCard model.newBlog) :: List.map blogCard model.blogs
 
 
-newCard : Model -> Html Msg
-newCard model =
-    inkCard [ class [ Grid.Col 1 ], class [ NewCard ], onClick New ]
-        (if model.creating then
-            form []
-                [ div [] [ Html.text <| "URL: " ++ (toUrl model.newBlog.title) ]
-                , inkInput "title" (\title -> ChangeTitle title) []
-                , inkTextarea "description" (\desc -> ChangeDescription desc) []
+newCard : NewBlog -> Html Msg
+newCard blog =
+    (if blog.creating then
+        inkCard [ class [ Grid.Col 1 ], class [ NewCard ] ] <|
+            form
+                [ class [ NewForm ] ]
+                [ div [] [ Html.text <| "Blog URL: " ++ (toUri blog.title) ]
+                , inkInput "TITLE" (\title -> ChangeTitle title) [ value blog.title ]
+                , inkInput "BLURB" (\blurb -> ChangeBlurb blurb) [ value blog.blurb ]
+                , inkRow []
+                    [ inkCol 1 [ class [ FormButton ] ] [ inkButtonPrimary "Create" CreateBlog ]
+                    , inkCol 1 [ class [ FormButton ] ] [ inkButtonCancel "Cancel" CancelCreate ]
+                    ]
                 ]
-         else
-            span []
+     else
+        inkCard [ class [ Grid.Col 1 ], class [ NewCard ], onClick New ] <|
+            span
+                []
                 [ iconButton NoOp "plus" "new blog" []
                 , Html.text " New Blog"
                 ]
-        )
+    )
 
 
-toUrl : String -> String
-toUrl title =
-    String.join "-" <| String.split " " <| String.toLower title
+toUri : String -> String
+toUri title =
+    Http.encodeUri <| String.join "-" <| String.split " " <| String.toLower title
 
 
 blogCard : Blog -> Html Msg
