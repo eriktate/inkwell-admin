@@ -1,12 +1,13 @@
 module Pages.Dashboard exposing (Msg, Model, view, css, update, init)
 
 import Html exposing (..)
+import Html.Events exposing (onClick)
 import Data.Blog exposing (Blog)
-import InkUI.Card as Card exposing (inkCardWithMenu)
+import InkUI.Card as Card exposing (inkCard, inkCardWithMenu)
 import InkUI.Grid as Grid exposing (inkRow)
 import InkUI.Base exposing (namespace)
-import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton)
-import InkUI.Checkbox exposing (inkCheckbox)
+import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton, iconButton)
+import InkUI.Input exposing (inkInput, inkTextarea)
 import Css exposing (..)
 import Html.CssHelpers
 
@@ -22,17 +23,35 @@ import Debug exposing (log)
 
 type CssClasses
     = BlogCard
+    | NewCard
 
 
 css : List Snippet
 css =
     [ Css.class BlogCard
         [ minWidth (px 320) ]
+    , Css.class NewCard
+        [ minWidth (px 320)
+        , displayFlex
+        , justifyContent center
+        , alignItems center
+        , cursor pointer
+        , fontWeight bold
+        ]
     ]
 
 
 type alias Model =
-    { blogs : List Blog }
+    { blogs : List Blog
+    , newBlog : NewBlog
+    , creating : Bool
+    }
+
+
+type alias NewBlog =
+    { title : String
+    , description : String
+    }
 
 
 type Msg
@@ -42,29 +61,34 @@ type Msg
     | Delete String
     | Tag String
     | Meter String
-    | Check
-    | Uncheck
+    | New
+    | ChangeTitle String
+    | ChangeDescription String
+    | NoOp
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { blogs = dummyBlogs }, Cmd.none )
+    ( { blogs = dummyBlogs, newBlog = { title = "", description = "" }, creating = False }, Cmd.none )
 
 
 dummyBlogs : List Blog
 dummyBlogs =
     [ { id = "abc"
       , title = "Test 1"
+      , post = []
       , blurb = "This is a test blog made for testing purposes"
       , published = False
       }
     , { id = "def"
       , title = "Test 2"
+      , post = []
       , blurb = "Will this test work? Who knows!!!???"
       , published = True
       }
     , { id = "ghi"
       , title = "Test 3"
+      , post = []
       , blurb = "For real though...are these tests working?"
       , published = True
       }
@@ -92,11 +116,25 @@ update msg model =
         Meter id ->
             ( model, log "Clicked meter" <| Cmd.none )
 
-        Check ->
-            ( model, log "Checked box" <| Cmd.none )
+        New ->
+            ( { model | creating = True }, Cmd.none )
 
-        Uncheck ->
-            ( model, log "Unchecked box" <| Cmd.none )
+        ChangeTitle title ->
+            let
+                newBlog =
+                    model.newBlog
+            in
+                ( { model | newBlog = { newBlog | title = title } }, Cmd.none )
+
+        ChangeDescription desc ->
+            let
+                newBlog =
+                    model.newBlog
+            in
+                ( { model | newBlog = { newBlog | description = desc } }, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 publishBlog : String -> Blog -> Blog
@@ -117,7 +155,29 @@ unpublishBlog id blog =
 
 view : Model -> Html Msg
 view model =
-    inkRow [] <| List.map blogCard model.blogs
+    inkRow [] <| (newCard model) :: List.map blogCard model.blogs
+
+
+newCard : Model -> Html Msg
+newCard model =
+    inkCard [ class [ Grid.Col 1 ], class [ NewCard ], onClick New ]
+        (if model.creating then
+            form []
+                [ div [] [ Html.text <| "URL: " ++ (toUrl model.newBlog.title) ]
+                , inkInput "title" (\title -> ChangeTitle title) []
+                , inkTextarea "description" (\desc -> ChangeDescription desc) []
+                ]
+         else
+            span []
+                [ iconButton NoOp "plus" "new blog" []
+                , Html.text " New Blog"
+                ]
+        )
+
+
+toUrl : String -> String
+toUrl title =
+    String.join "-" <| String.split " " <| String.toLower title
 
 
 blogCard : Blog -> Html Msg
@@ -134,16 +194,7 @@ blogCard blog =
         , deleteButton (Delete blog.id) []
         , tagButton (Tag blog.id) []
         , metricsButton (Meter blog.id) []
-        , inkCheckbox handleCheck []
         ]
-
-
-handleCheck : Bool -> Msg
-handleCheck check =
-    if check then
-        Check
-    else
-        Uncheck
 
 
 handlePublishButton : Blog -> Html Msg

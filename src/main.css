@@ -387,3 +387,12 @@ body {
 .iwBlogCard {
     min-width: 320px;
 }
+
+.iwNewCard {
+    min-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+}

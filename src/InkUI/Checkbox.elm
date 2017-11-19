@@ -19,8 +19,7 @@ type CssClasses
 css : List Snippet
 css =
     [ Css.class Checkbox
-        [ Css.visibility hidden
-        , borderStyle solid
+        [ borderStyle solid
         , backgroundColor white
         , borderWidth (px 1)
         , borderColor black

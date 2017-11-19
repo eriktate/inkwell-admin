@@ -1,6 +1,7 @@
 module InkUI.Input exposing (..)
 
 import Html exposing (..)
+import Html.Events exposing (onInput)
 import Css exposing (..)
 import Css.Elements as CssEl
 import InkUI.Base exposing (..)
@@ -54,23 +55,23 @@ css =
     ]
 
 
-inkInput : String -> List (Attribute msg) -> Html msg
-inkInput label attrs =
+inkInput : String -> (String -> msg) -> List (Attribute msg) -> Html msg
+inkInput label handler attrs =
     fieldset [ class [ Input ] ]
         [ Html.label []
             [ Html.text label ]
         , input
-            attrs
+            ((onInput handler) :: attrs)
             []
         ]
 
 
-inkTextarea : String -> List (Attribute msg) -> Html msg
-inkTextarea label attrs =
+inkTextarea : String -> (String -> msg) -> List (Attribute msg) -> Html msg
+inkTextarea label handler attrs =
     fieldset [ class [ Input ] ]
         [ Html.label []
             [ Html.text label ]
         , textarea
-            attrs
+            ((onInput handler) :: attrs)
             []
         ]

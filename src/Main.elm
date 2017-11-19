@@ -29,26 +29,6 @@ type alias Model =
     { pageState : PageState }
 
 
-dummyBlogs : List Blog
-dummyBlogs =
-    [ { id = "abc"
-      , title = "Test 1"
-      , blurb = "This is a test blog made for testing purposes"
-      , published = False
-      }
-    , { id = "def"
-      , title = "Test 2"
-      , blurb = "Will this test work? Who knows!!!???"
-      , published = True
-      }
-    , { id = "ghi"
-      , title = "Test 3"
-      , blurb = "For real though...are these tests working?"
-      , published = True
-      }
-    ]
-
-
 init : ( Model, Cmd Msg )
 init =
     let
