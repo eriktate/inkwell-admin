@@ -5,73 +5,65 @@ import Html.Events exposing (onInput)
 import Css exposing (..)
 import Css.Elements as CssEl
 import InkUI.Base exposing (..)
-import Html.CssHelpers
 
-
-{ id, class, classList } =
-    Html.CssHelpers.withNamespace namespace
-
-
-type CssClasses
-    = Input
-
-
-css : List Snippet
-css =
-    [ Css.class Input
-        [ borderStyle none
-        , children
-            [ CssEl.input
-                [ borderStyle solid
-                , borderWidth (px 1)
-                , borderColor dark
-                , backgroundColor ultrawhite
-                , boxShadow4 (px 1) (px 2) (px 3) gray
-                , width (pct 100)
-                , padding (Css.em 0.5)
-                , boxSizing borderBox
-                ]
-            , CssEl.textarea
-                [ borderStyle solid
-                , borderWidth (px 1)
-                , borderColor dark
-                , backgroundColor ultrawhite
-                , boxShadow4 (px 1) (px 2) (px 3) gray
-                , width (pct 100)
-                , resize vertical
-                , padding (Css.em 0.5)
-                , boxSizing borderBox
-                ]
-            , CssEl.label
-                [ fontFamilies [ "Raleway", "sans-serif" ]
-                , fontSize (pt 10)
-                , fontWeight bold
-                , display block
-                , textAlign right
-                , margin2 (px 0) (Css.em 1)
-                ]
-            ]
+labelStyle : Style
+label =
+    Css.batch
+        [ fontFamilies [ "Raleway", "sans-serif" ]
+        , fontSize (pt 10)
+        , fontWeight bold
+        , display block
+        , textAlign right
+        , margin2 (px 0) (Css.em 1)
         ]
-    ]
 
+textareaStyle : Style
+textarea =
+    Css.batch
+        [ borderStyle solid
+        , borderWidth (px 1)
+        , borderColor dark
+        , backgroundColor ultrawhite
+        , boxShadow4 (px 1) (px 2) (px 3) gray
+        , width (pct 100)
+        , resize vertical
+        , padding (Css.em 0.5)
+        , boxSizing borderBox
+        ]
 
-inkInput : String -> (String -> msg) -> List (Attribute msg) -> Html msg
-inkInput label handler attrs =
-    fieldset [ class [ Input ] ]
-        [ Html.label []
+inputStyle : Style
+input =
+    Css.batch
+        [ borderStyle solid
+        , borderWidth (px 1)
+        , borderColor dark
+        , backgroundColor ultrawhite
+        , boxShadow4 (px 1) (px 2) (px 3) gray
+        , width (pct 100)
+        , padding (Css.em 0.5)
+        , boxSizing borderBox
+        ]
+
+inkInput : String -> List (Attribute msg) -> Html msg
+inkInput label attrs =
+    styled fieldset
+        [ borderStyle none ]
+        []
+        [ Html.label [ css labelStyle ]
             [ Html.text label ]
         , input
-            ((onInput handler) :: attrs)
+            ((css inputStyle) :: attrs)
             []
         ]
 
-
-inkTextarea : String -> (String -> msg) -> List (Attribute msg) -> Html msg
-inkTextarea label handler attrs =
-    fieldset [ class [ Input ] ]
-        [ Html.label []
+inkInput : String -> List (Attribute msg) -> Html msg
+inkInput label attrs =
+    styled fieldset
+        [ borderStyle none ]
+        []
+        [ Html.label [ css labelStyle ]
             [ Html.text label ]
         , textarea
-            ((onInput handler) :: attrs)
+            ((css textareaStyle) :: attrs)
             []
         ]
