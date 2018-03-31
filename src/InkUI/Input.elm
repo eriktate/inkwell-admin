@@ -3,7 +3,6 @@ module InkUI.Input exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onInput)
 import Css exposing (..)
-import Css.Elements as CssEl
 import InkUI.Base exposing (..)
 
 
