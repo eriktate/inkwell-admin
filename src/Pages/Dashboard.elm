@@ -1,6 +1,6 @@
-module Pages.Dashboard exposing (Msg, Model, view, css, update, init)
+module Pages.Dashboard exposing (Msg, Model, view, update, init)
 
-import Html exposing (..)
+import Html.Styled as Html exposing (..)
 import Html.Events exposing (onClick, onSubmit)
 import Html.Attributes exposing (value)
 import Data.Blog exposing (Blog)
@@ -203,8 +203,8 @@ blogCard blog =
     styled inkCard
         [ minWidth (px 320) ]
         []
-        [ inkTitle [] [ Html.text blog.title ]
-        , inkCardWithMenu []
+        [ inkCardTitle [] [ Html.text blog.title ]
+        , inkCardMenuBody []
             [ Html.text blog.title ]
             [ inkCardMenu []
                 [ editButton (Edit blog.id) []

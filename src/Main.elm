@@ -4,12 +4,7 @@ import Html exposing (..)
 import InkUI.Base exposing (..)
 import Views.Shell as Shell
 import Pages.Dashboard as Dashboard
-import Html.CssHelpers
 import Data.Blog exposing (Blog)
-
-
-{ id, class, classList } =
-    Html.CssHelpers.withNamespace namespace
 
 
 type Page

@@ -1,7 +1,6 @@
 module InkUI.Card exposing (..)
 
 import Html.Styled exposing (..)
-import Html.Attributes exposing (style)
 import Css exposing (..)
 import Css.Foreign exposing (children, everything)
 import InkUI.Base exposing (..)
@@ -33,15 +32,15 @@ inkCardTitle =
 
 inkCardBody : List (Attribute msg) -> List (Html msg) -> Html msg
 inkCardBody =
-    styled inkRow [ marginTop (Css.em 1) [] ]
+    styled inkRow [ marginTop (Css.em 1) ]
 
 
 inkCardMenuBody : List (Attribute msg) -> List (Html msg) -> List (Html msg) -> Html msg
 inkCardMenuBody attrs body menu =
     inkCardBody
         attrs
-        [ inkCol 11 [] [ body ]
-        , inkCol 1 [] [ menu ]
+        [ inkCol 11 [] body
+        , inkCol 1 [] menu
         ]
 
 

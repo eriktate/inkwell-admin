@@ -1,7 +1,7 @@
 module Views.Shell exposing (view)
 
 import InkUI.Masthead exposing (inkMasthead)
-import Html exposing (..)
+import Html.Styled exposing (..)
 
 
 view : Html msg -> Html msg

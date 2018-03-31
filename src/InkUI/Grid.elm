@@ -1,10 +1,7 @@
 module InkUI.Grid exposing (..)
 
-import Html
 import Html.Styled exposing (..)
 import Css exposing (..)
-import List exposing (..)
-import InkUI.Base exposing (..)
 
 
 inkRow : List (Attribute msg) -> List (Html msg) -> Html msg
@@ -29,8 +26,8 @@ clampSize size =
 inkCol : Int -> List (Attribute msg) -> List (Html msg) -> Html msg
 inkCol size =
     let
-        size =
+        col =
             clampSize (size)
     in
         styled div
-            [ flex3 (int size) (int size) (int 0) ]
+            [ flex3 (int col) (int col) (int 0) ]

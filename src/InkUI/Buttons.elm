@@ -4,8 +4,9 @@ import Css exposing (..)
 import Html
 import Html.Styled exposing (..)
 import Html.Styled.Events exposing (onClick)
-import Html.Styled.Attributes exposing (src, title, type_)
+import Html.Styled.Attributes exposing (src, title, type_, attribute, class)
 import InkUI.Base exposing (..)
+
 
 inkButton : List (Attribute msg) -> List (Html msg) -> Html msg
 inkButton =
@@ -23,6 +24,7 @@ inkButton =
         , textTransform uppercase
         ]
 
+
 inkButtonPrimary : List (Attribute msg) -> List (Html msg) -> Html msg
 inkButtonPrimary =
     styled inkButton
@@ -31,23 +33,27 @@ inkButtonPrimary =
         , color white
         ]
 
+
 inkButtonCancel : List (Attribute msg) -> List (Html msg) -> Html msg
 inkButtonCancel =
-    styled inkButton =
+    styled inkButton
         [ backgroundColor dark
         , borderStyle none
         , color white
         ]
 
+
 dataGlyph : String -> Attribute msg
 dataGlyph name =
-    Html.Attributes.attribute "data-glyph" name
+    attribute "data-glyph" name
+
 
 iconButton : String -> List (Attribute msg) -> List (Html msg) -> Html msg
 iconButton icon attrs =
-    styled span 
+    styled span
         [ width (px 16) ]
-        ([Html.Attributes.class "oi", (dataGlyph icon)] ++ attrs)
+        ([ class "oi", (dataGlyph icon) ] ++ attrs)
+
 
 editButton : List (Attribute msg) -> List (Html msg) -> Html msg
 editButton =
@@ -56,7 +62,7 @@ editButton =
 
 deleteButton : List (Attribute msg) -> List (Html msg) -> Html msg
 deleteButton =
-    iconButton "trash" 
+    iconButton "trash"
 
 
 metricsButton : List (Attribute msg) -> List (Html msg) -> Html msg
@@ -69,7 +75,7 @@ tagButton =
     iconButton "tags"
 
 
-publishButton : List (Attribute msg) -> List (Html msg) ->  Html msg
+publishButton : List (Attribute msg) -> List (Html msg) -> Html msg
 publishButton =
     iconButton "account-login"
 
@@ -77,29 +83,3 @@ publishButton =
 unpublishButton : List (Attribute msg) -> List (Html msg) -> Html msg
 unpublishButton =
     iconButton "account-logout"
-
--- iconButton : msg -> String -> String -> List (Attribute msg) -> Html msg
--- iconButton msg icon desc attrs =
---     span ([ Html.Attributes.class "oi", (dataGlyph icon), title desc, onClick msg ] ++ attrs) []
-
--- inkButton : String -> CssClasses -> msg -> Html msg
--- inkButton label btnClass msg =
---     button [ type_ "button", class [ Button, btnClass ], onClick msg ] [ Html.text label ]
-
-
--- inkButtonPrimary : String -> msg -> Html msg
--- inkButtonPrimary label msg =
---     inkButton label Primary msg
-
-
--- inkButtonCancel : String -> msg -> Html msg
--- inkButtonCancel label msg =
---     inkButton label Cancel msg
-
-
-
--- iconButton : msg -> String -> String -> List (Attribute msg) -> Html msg
--- iconButton msg icon desc attrs =
---     span ([ Html.Attributes.class "oi", (dataGlyph icon), title desc, onClick msg ] ++ attrs) []
-
-

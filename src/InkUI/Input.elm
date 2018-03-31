@@ -1,9 +1,12 @@
 module InkUI.Input exposing (..)
 
-import Html exposing (..)
-import Html.Events exposing (onInput)
+import Html.Styled as Html exposing (..)
 import Css exposing (..)
+import Html.Styled.Attributes exposing (css)
 import InkUI.Base exposing (..)
+
+
+-- TODO: Consider making these styles into helper functions that return Html msg
 
 
 labelStyle : Style
@@ -52,20 +55,22 @@ inkInput label attrs =
     styled fieldset
         [ borderStyle none ]
         []
-        [ Html.label [ css labelStyle ]
+        [ Html.label [ css [ labelStyle ] ]
             [ Html.text label ]
         , input
-            ((css inputStyle) :: attrs)
+            ((css [ inputStyle ]) :: attrs)
             []
         ]
-inkInput : String -> List (Attribute msg) -> Html msg
-inkInput label attrs =
+
+
+inkTextarea : String -> List (Attribute msg) -> Html msg
+inkTextarea label attrs =
     styled fieldset
         [ borderStyle none ]
         []
-        [ Html.label [ css labelStyle ]
+        [ Html.label [ css [ labelStyle ] ]
             [ Html.text label ]
         , textarea
-            ((css textareaStyle) :: attrs)
+            ((css [ textareaStyle ]) :: attrs)
             []
         ]
