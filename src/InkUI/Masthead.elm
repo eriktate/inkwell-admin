@@ -1,22 +1,13 @@
 module InkUI.Masthead exposing (..)
 
-import Html exposing (..)
+import Html.Styled exposing (..)
 import Css exposing (..)
-import Html.CssHelpers
 import InkUI.Base exposing (..)
 
 
-{ id, class, classList } =
-    Html.CssHelpers.withNamespace namespace
-
-
-type CssClasses
-    = Masthead
-
-
-css : List Snippet
-css =
-    [ Css.class Masthead
+inkMasthead : List (Attribute msg) -> List (Html msg) -> Html msg
+inkMasthead =
+    styled div
         [ backgroundColor black
         , width (pct 100)
         , height (px 64)
@@ -29,9 +20,3 @@ css =
         , justifyContent center
         , padding2 (px 0) (Css.em 1)
         ]
-    ]
-
-
-inkMasthead : List (Attribute msg) -> List (Html msg) -> Html msg
-inkMasthead attrs inner =
-    div (class [ Masthead ] :: attrs) inner
