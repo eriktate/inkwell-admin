@@ -4,54 +4,18 @@ import Html exposing (..)
 import Html.Events exposing (onClick, onSubmit)
 import Html.Attributes exposing (value)
 import Data.Blog exposing (Blog)
-import InkUI.Card as Card exposing (inkCard, inkCardWithMenu)
+import InkUI.Card as Card exposing (inkCard, inkCardTitle, inkCardMenu, inkCardBody, inkCardMenuBody)
 import InkUI.Grid as Grid exposing (inkRow, inkCol)
 import InkUI.Base exposing (namespace)
 import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton, iconButton, inkButtonPrimary, inkButtonCancel)
 import InkUI.Input exposing (inkInput, inkTextarea)
 import Css exposing (..)
-import Html.CssHelpers
 import Http
 
 
 -- BAD THINGS
 
 import Debug exposing (log)
-
-
-{ id, class, classList } =
-    Html.CssHelpers.withNamespace namespace
-
-
-type CssClasses
-    = BlogCard
-    | NewCard
-    | NewForm
-    | FormButton
-
-
-css : List Snippet
-css =
-    [ Css.class BlogCard
-        [ minWidth (px 320) ]
-    , Css.class NewCard
-        [ minWidth (px 320)
-        , displayFlex
-        , justifyContent center
-        , alignItems center
-        , cursor pointer
-        , fontWeight bold
-        ]
-    , Css.class NewForm
-        [ margin (Css.em 1)
-        , width (pct 100)
-        ]
-    , Css.class FormButton
-        [ displayFlex
-        , justifyContent center
-        , alignItems center
-        ]
-    ]
 
 
 type alias Model =
@@ -187,28 +151,46 @@ view model =
     inkRow [] <| (newCard model.newBlog) :: List.map blogCard model.blogs
 
 
+formButton : List (Attribute msg) -> List (Html msg) -> Html msg
+formButton =
+    styled (inkCol 1)
+        [ displayFlex
+        , justifyContent center
+        , alignItems center
+        ]
+
+
 newCard : NewBlog -> Html Msg
 newCard blog =
-    (if blog.creating then
-        inkCard [ class [ Grid.Col 1 ], class [ NewCard ] ] <|
-            form
-                [ class [ NewForm ] ]
+    styled inkCard
+        [ minWidth (px 320)
+        , displayFlex
+        , justifyContent center
+        , alignItems center
+        , cursor pointer
+        , fontWeight bold
+        ]
+        [ onClick New ]
+        (if blog.creating then
+            styled form
+                [ margin (Css.em 1)
+                , width (pct 100)
+                ]
+                []
                 [ div [] [ Html.text <| "Blog URL: " ++ (toUri blog.title) ]
                 , inkInput "TITLE" (\title -> ChangeTitle title) [ value blog.title ]
                 , inkInput "BLURB" (\blurb -> ChangeBlurb blurb) [ value blog.blurb ]
                 , inkRow []
-                    [ inkCol 1 [ class [ FormButton ] ] [ inkButtonPrimary "Create" CreateBlog ]
-                    , inkCol 1 [ class [ FormButton ] ] [ inkButtonCancel "Cancel" CancelCreate ]
+                    [ formButton [] [ inkButtonPrimary "Create" [ onClick CreateBlog ] ]
+                    , formButton [] [ inkButtonCancel "Cancel" [ onClick CancelCreate ] ]
                     ]
                 ]
-     else
-        inkCard [ class [ Grid.Col 1 ], class [ NewCard ], onClick New ] <|
-            span
-                []
+         else
+            span []
                 [ iconButton NoOp "plus" "new blog" []
                 , Html.text " New Blog"
                 ]
-    )
+        )
 
 
 toUri : String -> String
@@ -216,20 +198,22 @@ toUri title =
     Http.encodeUri <| String.join "-" <| String.split " " <| String.toLower title
 
 
-blogCard : Blog -> Html Msg
+blogCard : Blog -> Html msg
 blogCard blog =
-    inkCardWithMenu [ class [ Grid.Col 1 ], class [ BlogCard ] ]
-        (div [ class [ Card.Title ] ]
+    styled inkCard
+        [ minWidth (px 320) ]
+        []
+        [ inkTitle [] [ Html.text blog.title ]
+        , inkCardWithMenu []
             [ Html.text blog.title ]
-        )
-        (div [ class [ Card.Body ] ]
-            [ Html.text blog.blurb ]
-        )
-        [ editButton (Edit blog.id) []
-        , handlePublishButton blog
-        , deleteButton (Delete blog.id) []
-        , tagButton (Tag blog.id) []
-        , metricsButton (Meter blog.id) []
+            [ inkCardMenu []
+                [ editButton (Edit blog.id) []
+                , handlePublishButton blog
+                , deleteButton (Delete blog.id) []
+                , tagButton (Tag blog.id) []
+                , metricsButton (Meter blog.id) []
+                ]
+            ]
         ]
 
 
