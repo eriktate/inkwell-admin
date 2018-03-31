@@ -6,6 +6,7 @@ import Css exposing (..)
 import List exposing (..)
 import InkUI.Base exposing (..)
 
+
 inkRow : List (Attribute msg) -> List (Html msg) -> Html msg
 inkRow =
     styled div
@@ -24,10 +25,12 @@ clampSize size =
     else
         size
 
+
 inkCol : Int -> List (Attribute msg) -> List (Html msg) -> Html msg
 inkCol size =
     let
-        size = clampSize(size)
+        size =
+            clampSize (size)
     in
         styled div
-            [ flex3 (int size) (int size) (int 0)]
+            [ flex3 (int size) (int size) (int 0) ]

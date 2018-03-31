@@ -6,8 +6,9 @@ import Css exposing (..)
 import Css.Elements as CssEl
 import InkUI.Base exposing (..)
 
+
 labelStyle : Style
-label =
+labelStyle =
     Css.batch
         [ fontFamilies [ "Raleway", "sans-serif" ]
         , fontSize (pt 10)
@@ -17,8 +18,9 @@ label =
         , margin2 (px 0) (Css.em 1)
         ]
 
+
 textareaStyle : Style
-textarea =
+textareaStyle =
     Css.batch
         [ borderStyle solid
         , borderWidth (px 1)
@@ -31,8 +33,9 @@ textarea =
         , boxSizing borderBox
         ]
 
+
 inputStyle : Style
-input =
+inputStyle =
     Css.batch
         [ borderStyle solid
         , borderWidth (px 1)
@@ -43,6 +46,7 @@ input =
         , padding (Css.em 0.5)
         , boxSizing borderBox
         ]
+
 
 inkInput : String -> List (Attribute msg) -> Html msg
 inkInput label attrs =
@@ -55,7 +59,6 @@ inkInput label attrs =
             ((css inputStyle) :: attrs)
             []
         ]
-
 inkInput : String -> List (Attribute msg) -> Html msg
 inkInput label attrs =
     styled fieldset

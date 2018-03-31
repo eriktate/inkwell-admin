@@ -1,7 +1,6 @@
 module InkUI.Base exposing (..)
 
 import Css exposing (..)
-import Css.Elements exposing (..)
 
 
 namespace : String
@@ -39,11 +38,10 @@ ultrawhite =
     (hex "ffffff")
 
 
-css : List Snippet
-css =
-    [ body
+bodyStyle : Style
+bodyStyle =
+    Css.batch
         [ backgroundColor white
         , color dark
         , fontFamilies [ "Raleway", "sans-serif" ]
         ]
-    ]
