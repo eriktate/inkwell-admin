@@ -1,16 +1,15 @@
 module Pages.Dashboard exposing (Msg, Model, view, update, init)
 
 import Html.Styled as Html exposing (..)
-import Html.Events exposing (onClick, onSubmit)
-import Html.Attributes exposing (value)
+import Html.Styled.Events exposing (onClick, onInput, onSubmit)
+import Html.Styled.Attributes exposing (value)
 import Data.Blog exposing (Blog)
-import InkUI.Card as Card exposing (inkCard, inkCardTitle, inkCardMenu, inkCardBody, inkCardMenuBody)
-import InkUI.Grid as Grid exposing (inkRow, inkCol)
-import InkUI.Base exposing (namespace)
-import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton, iconButton, inkButtonPrimary, inkButtonCancel)
-import InkUI.Input exposing (inkInput, inkTextarea)
 import Css exposing (..)
 import Http
+import InkUI.Card as Card exposing (inkCard, inkCardTitle, inkCardMenu, inkCardBody, inkCardMenuBody)
+import InkUI.Grid as Grid exposing (inkRow, inkCol)
+import InkUI.Buttons exposing (editButton, deleteButton, tagButton, metricsButton, publishButton, unpublishButton, iconButton, inkButtonPrimary, inkButtonCancel)
+import InkUI.Input exposing (inkInput, inkTextarea)
 
 
 -- BAD THINGS
@@ -170,27 +169,28 @@ newCard blog =
         , cursor pointer
         , fontWeight bold
         ]
-        [ onClick New ]
-        (if blog.creating then
+        []
+        [ (if blog.creating then
             styled form
                 [ margin (Css.em 1)
                 , width (pct 100)
                 ]
                 []
                 [ div [] [ Html.text <| "Blog URL: " ++ (toUri blog.title) ]
-                , inkInput "TITLE" (\title -> ChangeTitle title) [ value blog.title ]
-                , inkInput "BLURB" (\blurb -> ChangeBlurb blurb) [ value blog.blurb ]
+                , inkInput "TITLE" [ value blog.title, onInput (\title -> ChangeTitle title) ]
+                , inkInput "BLURB" [ value blog.blurb, onInput (\blurb -> ChangeBlurb blurb) ]
                 , inkRow []
-                    [ formButton [] [ inkButtonPrimary "Create" [ onClick CreateBlog ] ]
-                    , formButton [] [ inkButtonCancel "Cancel" [ onClick CancelCreate ] ]
+                    [ formButton [] [ inkButtonPrimary [ onClick CreateBlog ] [ Html.text "Create" ] ]
+                    , formButton [] [ inkButtonCancel [ onClick CancelCreate ] [ Html.text "Cancel" ] ]
                     ]
                 ]
-         else
-            span []
-                [ iconButton NoOp "plus" "new blog" []
+           else
+            span [ onClick New ]
+                [ iconButton "plus" [] []
                 , Html.text " New Blog"
                 ]
-        )
+          )
+        ]
 
 
 toUri : String -> String
@@ -198,7 +198,7 @@ toUri title =
     Http.encodeUri <| String.join "-" <| String.split " " <| String.toLower title
 
 
-blogCard : Blog -> Html msg
+blogCard : Blog -> Html Msg
 blogCard blog =
     styled inkCard
         [ minWidth (px 320) ]
@@ -207,11 +207,11 @@ blogCard blog =
         , inkCardMenuBody []
             [ Html.text blog.title ]
             [ inkCardMenu []
-                [ editButton (Edit blog.id) []
+                [ editButton [ onClick (Edit blog.id) ] []
                 , handlePublishButton blog
-                , deleteButton (Delete blog.id) []
-                , tagButton (Tag blog.id) []
-                , metricsButton (Meter blog.id) []
+                , deleteButton [ onClick (Delete blog.id) ] []
+                , tagButton [ onClick (Tag blog.id) ] []
+                , metricsButton [ onClick (Meter blog.id) ] []
                 ]
             ]
         ]
@@ -220,6 +220,6 @@ blogCard blog =
 handlePublishButton : Blog -> Html Msg
 handlePublishButton blog =
     if blog.published then
-        unpublishButton (Unpublish blog.id) []
+        unpublishButton [ onClick (Unpublish blog.id) ] []
     else
-        publishButton (Publish blog.id) []
+        publishButton [ onClick (Publish blog.id) ] []
